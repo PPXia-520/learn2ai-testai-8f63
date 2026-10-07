@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f8fa" />
+    <title>待办清单 | DAYLIST</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <!--
+      Icons: Lucide (https://lucide.dev), ISC License.
+      Copyright (c) 2026 Lucide Icons and Contributors.
+      Permission to use, copy, modify, and/or distribute this software for any
+      purpose with or without fee is hereby granted, provided that the above
+      copyright notice and this permission notice appear in all copies.
+      THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+      WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+      MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+      ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+      WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+      ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+      OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+      The plus and trash icons are derived from Feather, MIT License.
+      Copyright (c) 2013-present Cole Bemis.
+      Permission is hereby granted, free of charge, to any person obtaining a copy
+      of this software and associated documentation files (the "Software"), to deal
+      in the Software without restriction, including without limitation the rights
+      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+      copies of the Software, and to permit persons to whom the Software is
+      furnished to do so, subject to the following conditions:
+      The above copyright notice and this permission notice shall be included in all
+      copies or substantial portions of the Software.
+      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+      SOFTWARE.
+    -->
+    <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="icon-list" viewBox="0 0 24 24">
+        <path d="M13 5h8M13 12h8M13 19h8m-18-2 2 2 4-4" />
+        <rect x="3" y="4" width="6" height="6" rx="1" />
+      </symbol>
+      <symbol id="icon-plus" viewBox="0 0 24 24">
+        <path d="M5 12h14M12 5v14" />
+      </symbol>
+      <symbol id="icon-trash" viewBox="0 0 24 24">
+        <path d="M10 11v6M14 11v6M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      </symbol>
+    </svg>
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="brand">
+          <svg class="icon brand-icon" aria-hidden="true"><use href="#icon-list" /></svg>
+          <span>DAYLIST</span>
+        </div>
+        <time id="today" class="today"></time>
+      </div>
+    </header>
+    <main class="workspace">
+      <header class="workspace-heading">
+        <div>
+          <p class="eyebrow">我的事项</p>
+          <h1>待办清单<span class="heading-dot" aria-hidden="true">.</span></h1>
+        </div>
+        <p class="total-summary" id="total-summary">共 0 项</p>
+      </header>
+      <section class="progress-section" aria-label="完成进度">
+        <div class="progress-summary">
+          <span>完成进度</span>
+          <span><strong id="progress-percent">0%</strong><span class="progress-count" id="progress-count">0 / 0</span></span>
+        </div>
+        <progress id="progress" class="progress-bar" max="100" value="0" aria-label="事项完成百分比">0%</progress>
+      </section>
+      <form id="todo-form" class="add-form" novalidate>
+        <label class="visually-hidden" for="todo-input">新待办事项</label>
+        <input id="todo-input" name="todo" type="text" placeholder="接下来要做什么？" maxlength="200" autocomplete="off" aria-describedby="input-error" />
+        <button class="add-button" type="submit">
+          <svg class="icon" aria-hidden="true"><use href="#icon-plus" /></svg>
+          <span>添加</span>
+        </button>
+      </form>
+      <p id="input-error" class="input-error" role="alert" hidden></p>
+      <section class="tasks-section" aria-label="待办事项列表">
+        <div class="list-toolbar">
+          <div class="filters" role="group" aria-label="筛选待办事项">
+            <button type="button" class="filter-button" data-filter="all" aria-pressed="true">全部<span class="filter-count" id="all-count">0</span></button>
+            <button type="button" class="filter-button" data-filter="active" aria-pressed="false">待完成<span class="filter-count" id="active-count">0</span></button>
+            <button type="button" class="filter-button" data-filter="completed" aria-pressed="false">已完成<span class="filter-count" id="completed-count">0</span></button>
+          </div>
+          <span class="list-caption">事项</span>
+        </div>
+        <ul id="todo-list" class="todo-list"></ul>
+        <div id="empty-state" class="empty-state">
+          <svg class="icon empty-icon" aria-hidden="true"><use href="#icon-list" /></svg>
+          <h2 id="empty-title">清单还是空的</h2>
+          <p id="empty-description">今天的第一件事，会是什么？</p>
+        </div>
+        <footer class="list-footer">
+          <p id="remaining-count">剩余 0 项待完成</p>
+          <button id="clear-completed" class="clear-button" type="button" disabled>
+            <svg class="icon" aria-hidden="true"><use href="#icon-trash" /></svg>
+            <span>清除已完成</span>
+          </button>
+        </footer>
+      </section>
+      <p id="storage-warning" class="storage-warning" role="status" hidden></p>
+      <p id="announcement" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></p>
+      <noscript><p class="storage-warning">浏览器需要启用 JavaScript 才能操作待办事项。</p></noscript>
+    </main>
+    <template id="todo-template">
+      <li class="todo-item">
+        <label class="todo-label">
+          <input class="todo-checkbox" type="checkbox" />
+          <span class="todo-text"></span>
+        </label>
+        <button class="delete-button" type="button">
+          <svg class="icon" aria-hidden="true"><use href="#icon-trash" /></svg>
+        </button>
+      </li>
+    </template>
+  </body>
+</html>
